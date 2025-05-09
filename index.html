@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grid Color Changer</title>
+  <style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 40px);
+      grid-template-rows: repeat(10, 40px);
+      gap: 2px;
+    }
+    .cell {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>10x10 Grid</h1>
+  <div id="grid" class="grid"></div>
+
+  <script>
+    const gridElement = document.getElementById('grid');
+
+    function renderGrid(data) {
+      gridElement.innerHTML = '';
+      data.forEach((row, y) => {
+        row.forEach((color, x) => {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.style.backgroundColor = color;
+          cell.dataset.x = x;
+          cell.dataset.y = y;
+          gridElement.appendChild(cell);
+        });
+      });
+    }
+
+    async function fetchGrid() {
+      const res = await fetch('/grid');
+      const data = await res.json();
+      renderGrid(data);
+    }
+
+    setInterval(fetchGrid, 1000); // обновление каждую секунду
+    fetchGrid();
+  </script>
+</body>
+</html>
